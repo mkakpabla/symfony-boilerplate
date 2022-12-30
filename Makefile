@@ -47,7 +47,8 @@ backlogs: ;\
 init-dev: ;\
     cp -n docker-compose.override.yml.template docker-compose.override.yml; \
     cp -n .env.dist .env; \
-    echo "Add ${BASE_DOMAIN} and ${API_DOMAIN} to your /etc/host";
+    echo "Add ${BASE_DOMAIN} and ${API_DOMAIN} to your /etc/hosts"; \
+    if grep -qL ${BASE_DOMAIN} /etc/hosts; then echo "\n127.0.0.1 ${BASE_DOMAIN} ${API_DOMAIN}" | sudo tee -a /etc/hosts ; fi
 
 #
 # Theses are usefull when you use docker

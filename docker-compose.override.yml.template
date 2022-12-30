@@ -6,14 +6,14 @@ services:
       args:
         APP_ENV: dev
     volumes:
-      - ./apps/back/app:/var/www/html/:delegated
+      - ./apps/back:/var/www/html/:delegated
 
   initback:
     extends:
       service: back
     restart: "no"
     volumes:
-      - ./apps/back/app:/var/www/html/:delegated
+      - ./apps/back:/var/www/html/:delegated
     env_file:
       - .env
     command:
