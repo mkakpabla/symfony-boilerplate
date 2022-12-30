@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class LoginController
 {
-    #[Route('/api/login', name: 'api_login')]
+    #[Route('/login', name: 'api_login')]
     public function login(#[CurrentUser] User $user): JsonResponse
     {
         return new JsonResponse($user);

@@ -21,4 +21,14 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function createUser(string $identitier): User
+    {
+        return new User($identitier, ['ROLE_USER']);
+    }
+
+    public function createAdmin(string $identitier): User
+    {
+        return new User($identitier, ['ROLE_ADMIN']);
+    }
 }

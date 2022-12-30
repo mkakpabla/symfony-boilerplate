@@ -16,13 +16,13 @@ class User implements UserInterface, \JsonSerializable
     #[ORM\Column]
     private int|null $id = null;
 
-    #[ORM\Column]
-    /** @var array<string> */
-    private array $roles = [];
-
-    public function __construct(#[ORM\Column(length: 180, unique: true)]
-                                private readonly string $email,)
-    {
+    /** @param array<string> $roles */
+    public function __construct(
+        #[ORM\Column(length: 180, unique: true)]
+        private readonly string $email,
+        #[ORM\Column]
+        private array $roles,
+    ) {
     }
 
     public function getId(): int|null
@@ -60,11 +60,7 @@ class User implements UserInterface, \JsonSerializable
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     /**
