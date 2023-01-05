@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@pinia/nuxt": "^0.4.6",
+    "@types/http-proxy": "^1.17.9",
+    "@types/lodash": "^4.14.191",
+    "nuxt": "3.0.0",
+    "pinia": "^2.0.28",
+    "vue": "^3.2.45"
+  },
+  "dependencies": {
+    "http-proxy": "^1.18.1",
+    "http-proxy-middleware": "^2.0.6"
+  }
+}

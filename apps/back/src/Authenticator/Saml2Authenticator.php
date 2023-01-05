@@ -33,7 +33,7 @@ class Saml2Authenticator extends AbstractAuthenticator
             return false;
         }
 
-        return !isset($this->checkPath) || $this->httpUtils->checkRequestPath($request, $this->checkPath);
+        return $this->httpUtils->checkRequestPath($request, $this->checkPath);
     }
 
     public function authenticate(Request $request): Passport

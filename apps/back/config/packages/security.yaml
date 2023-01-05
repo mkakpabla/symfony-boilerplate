@@ -15,8 +15,14 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        login:
+            # prevent starting a session (allow better concurrency)
+            lazy: true
+            security: false
+            pattern: ^/api\/1.0\/authentication\/login/
         main:
-            lazy: false
+            security: true
+            lazy: true
             provider: app_user_provider
             custom_authenticators:
                 - 'App\Authenticator\Saml2Authenticator'
@@ -30,12 +36,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/1.0/auth/login/, roles: PUBLIC_ACCESS }
+        - { path: ^/api/1.0/, roles: IS_AUTHENTICATED_FULLY }
 
     role_hierarchy:
         ROLE_ADMIN:
-            - ROLE_USER
+            - ROLE_RIGHT_ACCESS
             - ROLE_RIGHT_USER_CREATE
         ROLE_USER:
             - ROLE_RIGHT_ACCESS
