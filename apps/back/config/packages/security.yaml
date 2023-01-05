@@ -15,11 +15,6 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        login:
-            # prevent starting a session (allow better concurrency)
-            lazy: true
-            security: false
-            pattern: ^/api\/1.0\/authentication\/login/
         main:
             security: true
             lazy: true
