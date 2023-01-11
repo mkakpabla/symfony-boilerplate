@@ -11,10 +11,6 @@ services:
       - traefik.http.services.back_service.loadbalancer.server.port=80
     environment:
       DATABASE_URL: ${DATABASE_URL}
-    networks:
-      tcm_network:
-        aliases:
-          - "${API_DOMAIN}"
 
   mysql:
     image: 'mariadb:10.7.3'
@@ -39,6 +35,11 @@ services:
     restart:  on-failure
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      tcm_network:
+        aliases:
+          - "${API_DOMAIN}"
+          - "${BASE_DOMAIN}"
   node:
     image: "node:16"
     user: "node"
@@ -52,6 +53,8 @@ services:
     working_dir: /home/node/app
     environment:
       - NODE_ENV=development
+      # This is used only per the proxy
+      - API_URL=http://${API_DOMAIN}/
     volumes:
       - ./apps/front/:/home/node/app
     command:

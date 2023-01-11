@@ -1,9 +1,13 @@
 <template>
   <div>
-    <NuxtPage />
+    <NuxtErrorBoundary @error="mHandleError">
+      <RedirectToLogin />
+      <NuxtPage />
+    </NuxtErrorBoundary>
   </div>
 </template>
 <script setup>
-  const {data, pending, error} = await useFetch("/api/1.0/auth/me");
-  console.log(data, error, pending);
+  const mHandleError = (e) => {
+    console.log("Primary error boundary");
+  }
 </script>

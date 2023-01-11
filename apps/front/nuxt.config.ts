@@ -4,5 +4,8 @@ export default defineNuxtConfig({
     modules: [
         // ...
         '@pinia/nuxt',
-    ]
+    ],
+    runtimeConfig: {
+        API_URL: process.env.API_URL
+    }
 })
