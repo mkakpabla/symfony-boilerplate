@@ -35,7 +35,9 @@ export const useAuthUser = defineStore({
             // Our session is based on the PHPSESSID cookie
             const me = useMe();
             try {
-                this.setAuthUser(await me());
+                const authUser = await me();
+                this.setAuthUser(authUser);
+                return authUser;
             }
             catch (e: any) {
                 if (!e || !e.response || e.response.status !== 401) {

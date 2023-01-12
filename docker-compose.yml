@@ -40,6 +40,21 @@ services:
         aliases:
           - "${API_DOMAIN}"
           - "${BASE_DOMAIN}"
+
+
+  samltest:
+    image: kristophjunge/test-saml-idp
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.samltest.rule=Host(`samltest.$BASE_DOMAIN`)
+      - traefik.http.routers.samltest.service=samltest
+      - traefik.http.services.samltest.loadbalancer.server.port=8080
+    environment:
+      - SIMPLESAMLPHP_SP_ENTITY_ID=http://$BASE_DOMAIN
+      - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://$API_DOMAIN/authentication
+      - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://$API_DOMAIN/api/1.0/login/sso/saml2/logout
+    volumes:
+      - ./ssoidp/idpUser.php:/var/www/simplesamlphp/config/authsources.php
   node:
     image: "node:16"
     user: "node"
