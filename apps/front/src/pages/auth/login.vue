@@ -13,8 +13,8 @@
 
 import {useAuthUser} from "~/store/auth";
 
-import {ref} from "vue";
-const store = useAuthUser();
+import {ref, watchEffect, watchPostEffect} from "vue";
+const authStore = useAuthUser();
 /**
  * If we’re using ref or reactive to store our state, they don’t get saved and passed along. So when the client is booted up, they don’t have any value and we need to rerun our setup code on the client.
  *
@@ -22,7 +22,13 @@ const store = useAuthUser();
  * **/
 const email = ref("user@kb.com");
 const submitAuthenticateUser = async () => {
-  await store.authenticateUser(email.value, "");
-  await navigateTo('/');
+  await authStore.authenticateUser(email.value, "");
+  return;
 }
+
+watchEffect(async () => {
+  if (authStore.isAuthenticated) {
+    await navigateTo('/');
+  }
+});
 </script>
