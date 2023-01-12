@@ -7,5 +7,6 @@ export default defineNuxtConfig({
     ],
     runtimeConfig: {
         API_URL: process.env.API_URL
-    }
+    },
+    css: ["bootstrap/dist/css/bootstrap.min.css"],
 })
