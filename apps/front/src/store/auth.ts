@@ -14,7 +14,7 @@ export const useAuthUser = defineStore({
     state: (): AuthState => {
         return {
             authUser: null,
-            isPending: true
+            isPending: false
         }
     },
     actions: {
@@ -47,6 +47,9 @@ export const useAuthUser = defineStore({
             this.isPending = false;
         },
         async syncMe() {
+            if (this.isPending) {
+                return ;
+            }
             // Our session is based on the PHPSESSID cookie
             const me = useMe();
             try {
@@ -54,7 +57,6 @@ export const useAuthUser = defineStore({
                 const authUser = await me();
                 this.setAuthUser(authUser);
                 this.endPending();
-                return authUser;
             }
             catch (e: any) {
                 this.endPending();

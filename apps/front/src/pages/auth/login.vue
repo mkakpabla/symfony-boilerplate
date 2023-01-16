@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="!authStore.isAuthenticated">
       <h1>Welcome to the login page</h1>
       <input type="text" v-model="email" />
       <button @click="submitAuthenticateUser">
@@ -14,6 +14,11 @@
 import {useAuthUser} from "~/store/auth";
 
 import {ref, watchEffect, watchPostEffect} from "vue";
+
+definePageMeta({
+  layout: "anonymous",
+});
+
 const authStore = useAuthUser();
 /**
  * If we’re using ref or reactive to store our state, they don’t get saved and passed along. So when the client is booted up, they don’t have any value and we need to rerun our setup code on the client.
@@ -25,10 +30,4 @@ const submitAuthenticateUser = async () => {
   await authStore.authenticateUser(email.value, "");
   return;
 }
-
-watchEffect(async () => {
-  if (authStore.isAuthenticated) {
-    await navigateTo('/');
-  }
-});
 </script>

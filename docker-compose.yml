@@ -76,7 +76,7 @@ services:
       - /bin/sh
       - -c
       - |
-        npm --loglevel=verbose install && npm run dev -- -o
+        yarn install && npm run dev -- -o
      #   npm run dev -- -o
 volumes:
   mysql_db:

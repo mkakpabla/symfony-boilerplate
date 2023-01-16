@@ -1,0 +1,56 @@
+<template>
+  <div>
+    <nav class="navbar navbar-dark navbar-expand bg-primary justify-content-center">
+      <div class="container">
+        <ul class="navbar-nav nav-justified w-100 text-center mt-1">
+          <li class="nav-item">
+            <a href="#" class="nav-link d-flex flex-column" data-toggle="collapse">
+              <icons1-square-fill />
+              <span class="d-none d-sm-inline mt-1">home</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link d-flex flex-column" data-toggle="collapse">
+              <icons2-square-fill></icons2-square-fill>
+              <span class="d-none d-sm-inline mt-1">map</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link d-flex flex-column" data-toggle="collapse">
+              <icons3-square-fill />
+              <span class="d-none d-sm-inline mt-1">point</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link d-flex flex-column" data-toggle="collapse">
+              <icons4-square-fill />
+              <span class="d-none d-sm-inline mt-1">cat</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link d-flex flex-column" data-toggle="collapse">
+              <icons5-square-fill />
+              <span class="d-none d-sm-inline mt-1">settings</span>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link text-center d-flex flex-column" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <icons6-square-fill></icons6-square-fill>
+              <span class="d-none d-sm-inline px-1 mt-1">menu <small>▼</small></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow-lg" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container py-5 px-5 px-sm-3 bg-light text-justify">
+      <slot />
+    </div>
+  </div>
+</template>
