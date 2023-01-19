@@ -2,41 +2,12 @@
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Setup
-
-Make sure to install the dependencies:
-
-```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
+# How to use
 
 ## Production
 
-Build the application for production:
+A default dockerfile is provided, the image expose the builded nuxt app on the port 80 
 
-```bash
-npm run build
-```
+## Dev
 
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Expose the port 24678 of the container, mount the root front directory into /home/node/app and run `yarn install && yarn dev -- -o` as the start command

@@ -18,10 +18,9 @@ class AuthController
         return new JsonResponse($user);
     }
 
-
     #[Route('/auth/me', name: 'api_me')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function me(#[CurrentUser] User $user): JsonResponse
+    public function getLoggedUser(#[CurrentUser] User $user): JsonResponse
     {
         return new JsonResponse($user);
     }

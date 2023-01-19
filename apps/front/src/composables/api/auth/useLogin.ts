@@ -1,14 +1,12 @@
-import useAppFetch from "~/composables/useAppFetch";
+import { Me } from './useMe';
 
-// https://nuxt.com/docs/getting-started/data-fetching#example-pass-client-headers-to-the-api
-
-import {Me} from './useMe';
-export default function () {
-    const { $appFetch } = useNuxtApp();
-    return (email: string) => $appFetch<Me>("/api/1.0/auth/login", {
-        method: "post",
-        body: {
-            "username": email
-        }
-    });
+export default function useLogin() {
+  const { $appFetch } = useNuxtApp();
+  return (email: string, password: string) => $appFetch<Me>('/api/1.0/auth/login', {
+    method: 'post',
+    body: {
+      username: email,
+      password,
+    },
+  });
 }

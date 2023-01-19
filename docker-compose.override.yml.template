@@ -8,6 +8,24 @@ services:
     volumes:
       - ./apps/back:/var/www/html/:delegated
 
+
+  front:
+    build:
+      context: ./apps/front/
+      args:
+        NODE_ENV: development
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "24678:24678"
+    volumes:
+     - ./apps/front/:/home/node/app
+    command:
+     - /bin/sh
+     - -c
+     - |
+       yarn install && yarn dev -- -o
+
   initback:
     extends:
       service: back

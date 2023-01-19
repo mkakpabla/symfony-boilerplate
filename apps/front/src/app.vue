@@ -7,32 +7,28 @@
     </NuxtErrorBoundary>
   </div>
 </template>
-<script setup>
-  import {watchEffect} from "vue";
-  import {useAuthUser} from "~/store/auth";
+<script setup lang="ts">
+import { watchEffect } from 'vue';
+import { useAuthUser } from '~/store/auth';
 
-  const authStore = useAuthUser();
+const authStore = useAuthUser();
 
-  const route = useRoute();
+const route = useRoute();
 
+const mHandleError = (e) => {
+  logger.error('Primary error boundary', e);
+};
 
-  const mHandleError = (e) => {
-    console.log("Primary error boundary");
+// Doing this here instead than in the middleware allow reactivity on the auth user
+watchEffect(async () => {
+  if (authStore.isPending) {
+    return;
   }
-
-  // Doing this here instead than in the middleware allow reactivity on the auth user
-  watchEffect(async () => {
-    if (authStore.isPending) {
-      return;
-    }
-    if (!authStore.isAuthenticated && route.name !== "auth-login") {
-      await navigateTo('/auth/login');
-    }
-    if (authStore.isAuthenticated && route.name === "auth-login") {
-      await navigateTo('/');
-    }
-  })
-
-
-
+  if (!authStore.isAuthenticated && route.name !== 'auth-login') {
+    await navigateTo('/auth/login');
+  }
+  if (authStore.isAuthenticated && route.name === 'auth-login') {
+    await navigateTo('/');
+  }
+});
 </script>

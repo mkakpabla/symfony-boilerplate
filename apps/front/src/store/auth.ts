@@ -1,73 +1,72 @@
 import { defineStore } from 'pinia';
-import useMe, { Me } from "~/composables/api/auth/useMe";
-import useLogin from "~/composables/api/auth/useLogin";
+import useMe, { Me } from '~/composables/api/auth/useMe';
+import useLogin from '~/composables/api/auth/useLogin';
 
 type User = Me;
 
 type AuthState = {
-    authUser: User | null,
-    isPending: boolean
-}
+  authUser: User | null;
+  isPending: boolean;
+};
 
 export const useAuthUser = defineStore({
-    id: 'auth-store',
-    state: (): AuthState => {
-        return {
-            authUser: null,
-            isPending: false
+  id: 'auth-store',
+  state: (): AuthState => ({
+    authUser: null,
+    isPending: false,
+  }),
+  actions: {
+    async authenticateUser(username: string, password: string) {
+      const authenticate = useLogin();
+      try {
+        this.startPending();
+        const me = await authenticate(username, password);
+        this.setAuthUser(me);
+        this.endPending();
+        return me;
+      } catch (e) {
+        this.endPending();
+        throw e;
+      }
+    },
+    removeAuthUser() {
+      this.authUser = null;
+    },
+    resetAuth() {
+      this.removeAuthUser();
+    },
+    setAuthUser(authUser: User) {
+      this.authUser = authUser;
+    },
+    startPending() {
+      this.isPending = true;
+    },
+    endPending() {
+      this.isPending = false;
+    },
+    async syncMe() {
+      if (this.isPending) {
+        return;
+      }
+      // Our session is based on the PHPSESSID cookie
+      const me = useMe();
+      try {
+        this.startPending();
+        const authUser = await me();
+        this.setAuthUser(authUser);
+        this.endPending();
+      } catch (e: any) {
+        this.endPending();
+        if (!e || !e.response || e.response.status !== 401) {
+          // TODO error store in appFetch
+          throw e;
         }
+      }
     },
-    actions: {
-        async authenticateUser(username: string, password: string) {
-            const authenticate = useLogin();
-            try {
-                this.startPending();
-                const me = await authenticate(username);
-                this.setAuthUser(me);
-                this.endPending();
-                return me;
-            } catch(e) {
-                this.endPending();
-                throw e;
-            }
-        },
-        removeAuthUser() {
-            this.authUser = null;
-        },
-        resetAuth() {
-            this.removeAuthUser();
-        },
-        setAuthUser(authUser: User) {
-            this.authUser = authUser;
-        },
-        startPending() {
-            this.isPending = true;
-        },
-        endPending() {
-            this.isPending = false;
-        },
-        async syncMe() {
-            if (this.isPending) {
-                return ;
-            }
-            // Our session is based on the PHPSESSID cookie
-            const me = useMe();
-            try {
-                this.startPending();
-                const authUser = await me();
-                this.setAuthUser(authUser);
-                this.endPending();
-            }
-            catch (e: any) {
-                this.endPending();
-                if (!e || !e.response || e.response.status !== 401) {
-                    // TODO error store in appFetch
-                    throw e;
-                }
-            }
-        }
-    },
-    getters: {
-        isAuthenticated: state => !!state.authUser,
-    },
-})
+  },
+  getters: {
+    isAuthenticated: (state) => !!state.authUser,
+  },
+});
+
+export default useAuthUser;

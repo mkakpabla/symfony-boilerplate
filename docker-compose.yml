@@ -41,25 +41,9 @@ services:
           - "${API_DOMAIN}"
           - "${BASE_DOMAIN}"
 
-
-  samltest:
-    image: kristophjunge/test-saml-idp
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.samltest.rule=Host(`samltest.$BASE_DOMAIN`)
-      - traefik.http.routers.samltest.service=samltest
-      - traefik.http.services.samltest.loadbalancer.server.port=8080
-    environment:
-      - SIMPLESAMLPHP_SP_ENTITY_ID=http://$BASE_DOMAIN
-      - SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE=http://$API_DOMAIN/authentication
-      - SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE=http://$API_DOMAIN/api/1.0/login/sso/saml2/logout
-    volumes:
-      - ./ssoidp/idpUser.php:/var/www/simplesamlphp/config/authsources.php
-  node:
-    image: "node:16"
+  front:
+    image: ${FRONT_IMAGE_NAME}:${DEPLOYMENT_TAG}
     user: "node"
-    ports:
-      - "24678:24678"
     labels:
       - traefik.enable=true
       - traefik.http.routers.front_router.rule=${FRONT_ROUTER_RULE}
@@ -67,17 +51,9 @@ services:
       - traefik.http.services.front_service.loadbalancer.server.port=3000
     working_dir: /home/node/app
     environment:
-      - NODE_ENV=development
       # This is used only per the proxy
-      - API_URL=http://${API_DOMAIN}/
-    volumes:
-      - ./apps/front/:/home/node/app
-    command:
-      - /bin/sh
-      - -c
-      - |
-        yarn install && npm run dev -- -o
-     #   npm run dev -- -o
+      - NUXT_API_URL=http://${API_DOMAIN}/
+
 volumes:
   mysql_db:
 networks:

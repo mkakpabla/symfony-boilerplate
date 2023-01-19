@@ -31,8 +31,8 @@
     </ul>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 // Credit to https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb
 // Another interesting ressource https://www.codeply.com/p/yE87h7irNi/icons-text
-import MenuItem from './MenuItem';
+import MenuItem from './MenuItem.vue';
 </script>
