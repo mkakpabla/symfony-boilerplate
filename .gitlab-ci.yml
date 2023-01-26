@@ -25,6 +25,7 @@ variables:
   FRONT_IMAGE_NAME: ${CI_REGISTRY_IMAGE}/front
   FRONT_IMAGE_WITH_TAG: ${FRONT_IMAGE_NAME}:${TAG_NAME}
   DEPLOYMENT_PATH: /tcm_deployment/${CI_PROJECT_NAME}
+  DEPLOYMENT_IP: 13.38.93.123
 
 include:
   - local: gitlab-ci/gitlab-ci-merge-request.yml

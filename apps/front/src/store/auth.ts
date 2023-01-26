@@ -46,7 +46,7 @@ export const useAuthUser = defineStore({
     },
     async syncMe() {
       if (this.isPending) {
-        return;
+        return { data: null, error: null, isPending: this.isPending };
       }
       // Our session is based on the PHPSESSID cookie
       const me = useMe();
@@ -55,12 +55,21 @@ export const useAuthUser = defineStore({
         const authUser = await me();
         this.setAuthUser(authUser);
         this.endPending();
+        return { data: authUser, error: null, isPending: this.isPending };
       } catch (e: any) {
         this.endPending();
-        if (!e || !e.response || e.response.status !== 401) {
+        const is401 = e?.response?.status === 401;
+        if (!is401) {
           // TODO error store in appFetch
           throw e;
         }
+
+        return {
+          data: null,
+          // eslint-disable-next-line
+          error: await e.response._data,
+          isPending: this.isPending,
+        };
       }
     },
   },

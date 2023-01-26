@@ -13,3 +13,40 @@ TMPDIR="$(mktemp -d)" && ssh-keygen -t ed25519 -q -N "" -C "gitlab@git.thecoding
 ```
 
 As best practice, add the public key into gitlab variable so it is not lost
+
+
+```
+cd /
+sudo mkdir  tcm_deployment
+sudo chown ubuntu:ubuntu tcm_deployment
+cd tcm_deployment/
+ssh-keygen -t ed25519
+cat ~/.ssh/id_ed25519.pub
+```
+
+Ajouter la clé dans Settings > repository > deploy key
+
+```
+cd /tcm_deployment
+git clone git@git.thecodingmachine.com:tcm-projects/analysec-app.git 
+sudo apt-get update
+sudo apt-get install     ca-certificates     curl     gnupg     lsb-release
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo docker run hello-world
+sudo apt  install docker-compose
+sudo apt install make
+cp .env.dist .env
+cp docker-compose.override.yml.template  docker-compose.override.yml
+
+sudo groupadd docker 
+sudo usermod -aG docker $USER
+
+105  docker login git.thecodingmachine.com:444 -u  gitlab-deploy-token -pjhg4oYFU2huHJKPHgHTF
+```
+
+Create a deploy token (NOT a key) named gitlab-deploy-token

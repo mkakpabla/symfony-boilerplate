@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Authenticator;
 
+use OneLogin\Saml2\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,12 +15,17 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class Saml2Authenticator extends AbstractAuthenticator
+class Saml2Authenticator extends AbstractAuthenticator implements AuthenticationEntryPointInterface
 {
-    public function __construct(private readonly UserProviderInterface $userProvider, private readonly HttpUtils $httpUtils, private readonly string $checkPath)
-    {
+    public function __construct(
+        private readonly UserProviderInterface $userProvider,
+        private readonly HttpUtils $httpUtils,
+        private readonly string $checkPath,
+        private readonly Auth $auth,
+    ) {
     }
 
     /**
@@ -62,5 +68,17 @@ class Saml2Authenticator extends AbstractAuthenticator
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
+    }
+
+    /** @inheritDoc */
+    public function start(Request $request, AuthenticationException|null $authException = null)
+    {
+        $session        = $request->getSession();
+        $auth           = $this->auth;
+        $url            = $auth->login(null, [], false, false, true);
+        $authNRequestId = $auth->getLastRequestID();
+        $session->set('AuthNRequestID', $authNRequestId);
+
+        return new JsonResponse(['url' => $url], Response::HTTP_UNAUTHORIZED);
     }
 }
