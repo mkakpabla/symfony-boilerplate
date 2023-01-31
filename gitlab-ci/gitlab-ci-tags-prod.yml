@@ -39,6 +39,7 @@ deploy prod:
     - .only-prod-tags
   needs:
     - back build prod
+    - front build prod
   image: ubuntu
   variables:
     SSH_PRIVATE_KEY: $PROD_SSH_PRIVATE_KEY
@@ -70,7 +71,7 @@ deploy prod:
     ##
     - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
   script:
-    - ssh -o "StrictHostKeyChecking no" ubuntu@${DEPLOYMENT_IP} " cd ${DEPLOYMENT_PATH} && git pull && docker login -u '$CI_DEPLOY_USER' -p '$CI_DEPLOY_PASSWORD' $CI_REGISTRY && DEPLOYMENT_TAG=${TAG_NAME} docker compose pull && DEPLOYMENT_TAG=${TAG_NAME} docker compose up -d --force-recreate; make migrate"
+    - ssh -o "StrictHostKeyChecking no" ubuntu@${DEPLOYMENT_IP} " cd ${DEPLOYMENT_PATH} && git pull && docker login -u '$CI_DEPLOY_USER' -p '$CI_DEPLOY_PASSWORD' $CI_REGISTRY && DEPLOYMENT_TAG=${TAG_NAME} docker compose pull && DEPLOYMENT_TAG=${TAG_NAME} docker compose up -d --force-recreate && make migrate"
   interruptible: false
   timeout: 20m
   allow_failure: false
