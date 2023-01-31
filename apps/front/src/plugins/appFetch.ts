@@ -17,7 +17,7 @@ export default defineNuxtPlugin(() => {
       // // https://nuxt.com/docs/getting-started/data-fetching#example-pass-client-headers-to-the-api
       appFetch: async <T>(request: NitroFetchRequest, opts?: FetchOptions) => {
         try {
-          return await $fetch.raw<T>(request, {
+          return await $fetch<T>(request, {
             headers,
             ...opts,
           });

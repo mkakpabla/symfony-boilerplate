@@ -7,6 +7,7 @@ type User = Me;
 type AuthState = {
   authUser: User | null;
   isPending: boolean;
+  authUrl: string;
 };
 
 export const useAuthUser = defineStore({
@@ -14,6 +15,7 @@ export const useAuthUser = defineStore({
   state: (): AuthState => ({
     authUser: null,
     isPending: false,
+    authUrl: '',
   }),
   actions: {
     async authenticateUser(username: string, password: string) {
@@ -63,11 +65,13 @@ export const useAuthUser = defineStore({
           // TODO error store in appFetch
           throw e;
         }
-
+        // eslint-disable-next-line no-underscore-dangle
+        const ret = await e.response._data;
+        this.authUrl = ret?.url || '';
         return {
           data: null,
-          // eslint-disable-next-line
-          error: await e.response._data,
+
+          error: ret,
           isPending: this.isPending,
         };
       }

@@ -1,5 +1,5 @@
 export interface Me {
-  email: string;
+  username: string;
 }
 
 export default function useMe(): () => Promise<Me> {

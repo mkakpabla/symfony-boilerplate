@@ -24,10 +24,12 @@ watchEffect(async () => {
   if (authStore.isPending) {
     return;
   }
-  if (!authStore.isAuthenticated && route.name !== 'auth-login') {
-    await navigateTo('/auth/login');
+  const shouldRedirectToLogin = !authStore.isAuthenticated && authStore.authUrl && route.name !== 'auth-login';
+  if (shouldRedirectToLogin) {
+    await navigateTo(authStore.authUrl, { external: true });
   }
-  if (authStore.isAuthenticated && route.name === 'auth-login') {
+  const shouldRedirectToHomepage = authStore.isAuthenticated && route.name === 'auth-login';
+  if (shouldRedirectToHomepage) {
     await navigateTo('/');
   }
 });

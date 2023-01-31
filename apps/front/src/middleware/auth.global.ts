@@ -17,13 +17,5 @@ export default defineNuxtRouteMiddleware(async () => {
   if (!shouldWait) {
     return;
   }
-  const {
-    error,
-  } = await mePromise;
-  if (error) {
-    // eslint-disable-next-line
-    return navigateTo(error.url, {
-      external: true,
-    });
-  }
+  await mePromise;
 });

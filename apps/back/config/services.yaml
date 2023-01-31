@@ -19,7 +19,7 @@ parameters:
         debug: true
         sp:
             entityId: '%app.url.base%'
-            assertionConsumerService: { url: '%app.url.base%/auth/sso/saml2/login' }
+            assertionConsumerService: { url: '%app.url.base%/api/1.0/auth/sso/saml2/login' }
             singleLogoutService: { url: "%app.url.base%/api/1.0/auth/sso/saml2/logout" }
             NameIDFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
             x509cert: "%app.sso.serviceprovider.x509cert%"

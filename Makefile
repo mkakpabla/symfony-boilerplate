@@ -12,8 +12,13 @@ ifneq (,$(wildcard ./.env.prod))
 endif
 
 # connect to the back container
-.PHONY: bash
-bash: ;\
+.PHONY: bbash
+bbash: ;\
+    docker compose exec back bash;
+
+# connect to the front container
+.PHONY: bbash
+fbash: ;\
     docker compose exec back bash;
 
 
@@ -100,9 +105,17 @@ cs-check: ;\
 phpstan: ;\
 	docker compose exec back composer -- run phpstan
 
+.PHONY: frontlint
+frontlint: ;\
+	docker compose exec front yarn lint --fix
+
+.PHONY: frontcheck
+frontcheck: ;\
+	docker compose exec front yarn lint
+
 # Run all CI tools
 .PHONY: ci
-ci: cs-fix phpstan phpmd
+ci: cs-fix phpstan phpmd frontlint
 
 .PHONY: dump
 dump: ;\
