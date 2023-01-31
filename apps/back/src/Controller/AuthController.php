@@ -18,7 +18,7 @@ class AuthController
     {
     }
 
-    #[Route('/auth/login', name: 'api_login')]
+    #[Route('/auth/sso/saml2/login', name: 'api_login_saml2', methods: ['POST'])]
     public function login(#[CurrentUser] User $user): JsonResponse
     {
         return new JsonResponse($user);

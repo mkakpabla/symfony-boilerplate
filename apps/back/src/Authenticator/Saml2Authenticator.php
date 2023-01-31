@@ -35,14 +35,16 @@ class Saml2Authenticator extends AbstractAuthenticator implements Authentication
      */
     public function supports(Request $request): bool|null
     {
-        if (!str_contains($request->getRequestFormat() ?? '', 'json') && !str_contains($request->getContentType() ?? '', 'json')) {
-            return false;
-        }
-
         return $this->httpUtils->checkRequestPath($request, $this->checkPath);
     }
 
     public function authenticate(Request $request): Passport
+    {
+        throw new \Exception('implement authentification saml2');
+    }
+
+    /** This is kept as example **/
+    public function basicAuthenticate(Request $request): Passport
     {
         $data = \json_decode((string) $request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
