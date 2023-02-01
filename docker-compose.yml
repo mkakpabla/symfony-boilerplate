@@ -61,6 +61,7 @@ services:
     environment:
       # This is used only per the proxy
       - NUXT_API_URL=http://${API_DOMAIN}/
+      - NUXT_PUBLIC_DISABLE_AUTHENTICATION=true
 
 volumes:
   mysql_db:

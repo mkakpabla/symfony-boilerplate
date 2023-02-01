@@ -19,12 +19,14 @@ const mHandleError = (e) => {
   logger.error('Primary error boundary', e);
 };
 
+const { DISABLE_AUTHENTICATION } = useRuntimeConfig();
+
 // Doing this here instead than in the middleware allow reactivity on the auth user
 watchEffect(async () => {
   if (authStore.isPending) {
     return;
   }
-  const shouldRedirectToLogin = !authStore.isAuthenticated && authStore.authUrl && route.name !== 'auth-login';
+  const shouldRedirectToLogin = !DISABLE_AUTHENTICATION && !authStore.isAuthenticated && authStore.authUrl && route.name !== 'auth-login';
   if (shouldRedirectToLogin) {
     await navigateTo(authStore.authUrl, { external: true });
   }

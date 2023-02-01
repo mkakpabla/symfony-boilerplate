@@ -5,7 +5,10 @@ export default defineNuxtConfig({
         '@pinia/nuxt',
     ],
     runtimeConfig: {
-        API_URL: process.env.API_URL || ''
+        API_URL: process.env.API_URL || '',
+        public: {
+            DISABLE_AUTHENTICATION: process.env.DISABLE_AUTHENTICATION || ''
+        }
     },
     app: {
 
@@ -20,7 +23,19 @@ export default defineNuxtConfig({
             ],
         }
     },
-    css: ["bootstrap/dist/css/bootstrap.min.css"],
+    css: [
+       // "bootstrap/dist/css/bootstrap.min.css",
+        '@/assets/styles/main.scss'
+    ],
+    vite: {
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    additionalData: '@import "@/assets/styles/_functions.scss";@import "@/assets/styles/_variables.scss";@import "@/assets/styles/_mixins.scss";'
+                }
+            }
+        }
+    }
     //ssr: false
 
 })

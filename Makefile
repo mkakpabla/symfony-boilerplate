@@ -19,7 +19,7 @@ bbash: ;\
 # connect to the front container
 .PHONY: bbash
 fbash: ;\
-    docker compose exec back bash;
+    docker compose exec front bash;
 
 
 # Launch migration
