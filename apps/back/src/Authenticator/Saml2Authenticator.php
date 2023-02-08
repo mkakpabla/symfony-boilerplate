@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Authenticator;
 
+use App\Exception\SsoConsumerAuthN;
 use OneLogin\Saml2\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +41,28 @@ class Saml2Authenticator extends AbstractAuthenticator implements Authentication
 
     public function authenticate(Request $request): Passport
     {
-        throw new \Exception('implement authentification saml2');
+        $session = $request->getSession();
+        $authNRequestId = $session->get('AuthNRequestID', null);
+        if (! \is_string($authNRequestId)) {
+            throw new SsoConsumerAuthN();
+        }
+
+        $auth   = $this->auth;
+        $auth->setStrict(false);
+        $auth->processResponse($authNRequestId);
+        $errors = $auth->getErrors();
+        if (! empty($errors)) {
+            throw new \Exception();
+        }
+        $email  = $auth->getNameId();
+        $emails = $auth->getAttribute('email');
+
+        if ($emails) {
+            $email = $emails[0];
+        }
+        $this->userProvider->loadUserByIdentifier($email); // Check user existance
+
+        return new SelfValidatingPassport(new UserBadge($email));
     }
 
     /** This is kept as example **/

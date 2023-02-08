@@ -50,8 +50,6 @@ services:
       - traefik.http.routers.phpmyadmin_router.rule=${PHPMYADMIN_ROUTER_RULE}
       - traefik.http.routers.phpmyadmin_router.service=phpmyadmin_service
       - traefik.http.services.phpmyadmin_service.loadbalancer.server.port=80
-      - traefik.http.middlewares.phpmyadmin_ipwhitelist.ipwhitelist.sourcerange=172.21.0.1/8
-      - traefik.http.routers.phpmyadmin_router.middlewares=phpmyadmin_ipwhitelist@docker
     links:
       - "mysql:db"
   mysql:

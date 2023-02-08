@@ -30,6 +30,20 @@ services:
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
     volumes:
       - mysql_db:/var/lib/mysql
+
+  front:
+    image: ${FRONT_IMAGE_NAME}:${DEPLOYMENT_TAG}
+    user: "node"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.front_router.rule=${FRONT_ROUTER_RULE}
+      - traefik.http.routers.front_router.service=front_service
+      - traefik.http.services.front_service.loadbalancer.server.port=3000
+    working_dir: /home/node/app
+    environment:
+      # This is used only per the proxy
+      - NUXT_API_URL=http://${API_DOMAIN}/
+      #- NUXT_PUBLIC_DISABLE_AUTHENTICATION=true
   proxy:
     image: traefik:3.0
     container_name: tcm_proxy
@@ -48,20 +62,6 @@ services:
         aliases:
           - "${API_DOMAIN}"
           - "${BASE_DOMAIN}"
-
-  front:
-    image: ${FRONT_IMAGE_NAME}:${DEPLOYMENT_TAG}
-    user: "node"
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.front_router.rule=${FRONT_ROUTER_RULE}
-      - traefik.http.routers.front_router.service=front_service
-      - traefik.http.services.front_service.loadbalancer.server.port=3000
-    working_dir: /home/node/app
-    environment:
-      # This is used only per the proxy
-      - NUXT_API_URL=http://${API_DOMAIN}/
-      - NUXT_PUBLIC_DISABLE_AUTHENTICATION=true
 
 volumes:
   mysql_db:

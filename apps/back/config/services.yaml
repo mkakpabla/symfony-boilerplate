@@ -29,6 +29,8 @@ parameters:
             singleSignOnService: { url: "%app.sso.identityprovider.loginurl%" }
             singleLogoutService: { url: "%app.sso.identityprovider.logouturl%" }
             x509cert: "%app.sso.identityprovider.x509cert%"
+        security:
+            wantAssertionsEncrypted: true
 
 services:
     # default configuration for services in *this* file
@@ -64,3 +66,9 @@ services:
         class: OneLogin\Saml2\Auth
         arguments:
             $settings: "%app.sso.configuration%"
+
+    App\Controller\AuthController:
+        tags:
+            - {name: controller.service_arguments}
+        arguments:
+            $appUrl: "%app.url.base%"

@@ -20,7 +20,6 @@ const mHandleError = (e) => {
 };
 
 const { DISABLE_AUTHENTICATION } = useRuntimeConfig();
-
 // Doing this here instead than in the middleware allow reactivity on the auth user
 watchEffect(async () => {
   if (authStore.isPending) {
